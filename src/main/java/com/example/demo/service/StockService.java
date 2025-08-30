@@ -17,7 +17,6 @@ public class StockService {
         return restTemplate.getForObject(url, GlobalQuoteResponse.class);
     }
 
-    // This is the missing method that the controller is trying to call
     public String getStockDetails(String symbol) {
         String url = BASE_URL + "?function=OVERVIEW&symbol=" + symbol + "&apikey=" + API_KEY;
         return restTemplate.getForObject(url, String.class);
