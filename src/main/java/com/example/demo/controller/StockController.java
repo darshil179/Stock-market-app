@@ -17,7 +17,7 @@ public class StockController {
 
     private final StockService stockService;
     private final ObjectMapper objectMapper;
-    // Spring automatically provides the StockService object here
+    
     @Autowired 
     public StockController(StockService stockService, ObjectMapper objectMapper) {
         this.stockService = stockService;
