@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Dashboard</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Stock Market Watch</h1>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="search-container">
+            <h2>Search for a Stock</h2>
+            <div class="search-box">
+                <form action="/stocks" method="get">
+                    <input type="text" name="symbol" id="stock-search" placeholder="Enter stock symbol (e.g., AAPL, GOOGL)" th:value="${stock?.symbol}">
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+        </section>
+
+        <section th:if="${stock != null and stock.symbol != null}" id="stock-details" class="details-container">
+            <h2>Stock Details: <span th:text="${stock.symbol}"></span></h2>
+            <div class="stock-details-grid">
+                <div><strong>Symbol:</strong> <span th:text="${stock.symbol}"></span></div>
+                <div><strong>Price:</strong> <span th:text="${stock.price}"></span></div>
+                <div><strong>Previous Close:</strong> <span th:text="${stock.previousClose}"></span></div>
+                <div><strong>Change:</strong> <span th:text="${stock.change}"></span></div>
+                <div><strong>Change Percent:</strong> <span th:text="${stock.changePercent}"></span></div>
+            </div>
+        </section>
+
+        <section class="top-stocks-container">
+            <h2>Top Performing Gainers</h2>
+            <div class="stock-grid">
+                <div th:each="gainer : ${topGainers}" class="stock-card" th:data-ticker="${gainer.get('ticker')}" onclick="searchStock(this)">
+                    <h3 th:text="${gainer.get('ticker')}"></h3>
+                    <p class="price" th:text="${gainer.get('price')}"></p>
+                    <p class="change up" th:classappend="${gainer.get('change_percentage').asText().startsWith('-') ? 'down' : 'up'}" th:text="${gainer.get('change_percentage')}"></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+    function searchStock(element) {
+        // Get the value from the data-ticker attribute of the clicked element
+        const symbol = element.getAttribute('data-ticker');
+        
+        // Redirect to the search URL
+        if (symbol) {
+            window.location.href = `/stocks?symbol=${symbol}`;
+        }
+    }
+</script>
+</body>
+</html>
